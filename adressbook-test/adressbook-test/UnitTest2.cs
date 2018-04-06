@@ -7,7 +7,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
-namespace WebAddressbookTests
+
+namespace adressbook_test
 {
     [TestFixture]
     public class GroupCreationTests
@@ -45,11 +46,11 @@ namespace WebAddressbookTests
         public void GroupCreationTest()
         {
             OpenHomePage();
-            Login("admin", "secret");
+            Login(new AccountData("admin", "secret"));
             GoToGroupPage();
             //Init new group creation
             driver.FindElement(By.Name("new")).Click();
-            FillGroupFom("aaaa","ssss","ddd");
+            FillGroupFom(new GroupData("aaaa"));
             SubmitGroupCreation();
             ReturnToGroupPage();
     
@@ -65,18 +66,18 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("submit")).Click();
         }
 
-        private void FillGroupFom(string name, string header, string footer)
+        private void FillGroupFom(GroupData group)
         {
             //fill form
             driver.FindElement(By.Name("group_name")).Click();
             driver.FindElement(By.Name("group_name")).Clear();
-            driver.FindElement(By.Name("group_name")).SendKeys(name);
+            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
             driver.FindElement(By.Name("group_header")).Click();
             driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(header);
+            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
             driver.FindElement(By.Name("group_footer")).Click();
             driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(footer);
+            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
             driver.FindElement(By.XPath("//form[@action='/addressbook/group.php']")).Click();
         }
 
@@ -86,13 +87,13 @@ namespace WebAddressbookTests
             driver.FindElement(By.LinkText("groups")).Click();
         }
 
-        private void Login(string username, string password)
+        private void Login(AccountData account)
         {
             //Login
             driver.FindElement(By.Name("user")).Clear();
-            driver.FindElement(By.Name("user")).SendKeys(username);
+            driver.FindElement(By.Name("user")).SendKeys(account.Username);
             driver.FindElement(By.Name("pass")).Clear();
-            driver.FindElement(By.Name("pass")).SendKeys(password);
+            driver.FindElement(By.Name("pass")).SendKeys(account.Password);
             driver.FindElement(By.Id("LoginForm")).Submit();
         }
 
